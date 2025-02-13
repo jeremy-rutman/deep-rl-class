@@ -36,7 +36,7 @@ That’s why in Reinforcement Learning, **to have the best behavior,** we aim 
 
 In papers, you’ll see that the RL process is called a **Markov Decision Process** (MDP).
 
-We’ll talk again about the Markov Property in the following units. But if you need to remember something today about it, it's this: the Markov Property implies that our agent needs **only the current state to decide** what action to take and **not the history of all the states and actions** they took before.
+We’ll talk again about the Markov Property in the following units. But if you need to remember something today about it, it's this: the Markov Property implies that our agent needs **only the current state to decide** what action to take and **not the history of all the states and actions** they took before.  The decision taken, however, will be informed by things that have been learned in previous or even the current episode.
 
 ## Observations/States Space [[obs-space]]
 
@@ -44,17 +44,17 @@ Observations/States are the **information our agent gets from the environment.*
 
 There is a differentiation to make between *observation* and *state*, however:
 
-- *State s*: is **a complete description of the state of the world** (there is no hidden information). In a fully observed environment.
+- *State s*: is **a complete description of the state of the world** (there is no hidden information), in a fully observed environment.
 
 
 <figure>
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/chess.jpg" alt="Chess">
-<figcaption>In chess game, we receive a state from the environment since we have access to the whole check board information.</figcaption>
+<figcaption>In a chess game, we receive a state from the environment since we have access to the whole chess board information.</figcaption>
 </figure>
 
 In a chess game, we have access to the whole board information, so we receive a state from the environment. In other words, the environment is fully observed.
 
-- *Observation o*: is a **partial description of the state.** In a partially observed environment.
+- *Observation o*: is a **partial description of the state** - the environment is partially observed.
 
 <figure>
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/mario.jpg" alt="Mario">
@@ -93,20 +93,20 @@ Again, in Super Mario Bros, we have a finite set of actions since we have only 4
 
 <figure>
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/self_driving_car.jpg" alt="Self Driving Car">
-<figcaption>A Self Driving Car agent has an infinite number of possible actions since it can turn left 20°, 21,1°, 21,2°, honk, turn right 20°…
+<figcaption>A Self Driving Car agent has an infinite number of possible actions since it can turn left 20°, 21.1°, 21.2°, honk, turn right 20°…
 </figcaption>
 </figure>
 
 To recap:
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/action_space.jpg" alt="Action space recap" width="100%">
 
-Taking this information into consideration is crucial because it will **have importance when choosing the RL algorithm in the future.**
+Taking this information into consideration is crucial because it will **have importance when choosing your RL algorithm in the future.**
 
 ## Rewards and the discounting [[rewards]]
 
 The reward is fundamental in RL because it’s **the only feedback** for the agent. Thanks to it, our agent knows **if the action taken was good or not.**
 
-The cumulative reward at each time step **t** can be written as:
+The ***cumulative*** reward at each time step **t** can be written as:
 
 <figure>
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/rewards_1.jpg" alt="Rewards">
@@ -122,17 +122,17 @@ Which is equivalent to:
 </figcaption>
 </figure>
 
-However, in reality, **we can’t just add them like that.** The rewards that come sooner (at the beginning of the game) **are more likely to happen** since they are more predictable than the long-term future reward.
+However, in reality, **we won’t just add them like that.** In light of the fact that there may be random effects in the environment, or that our own actions may not lead to what we think they will, we can favorably weight the rewards that come sooner (at the beginning of the game), which **are more likely to happen** since they are more predictable than the long-term future reward.
 
 Let’s say your agent is this tiny mouse that can move one tile each time step, and your opponent is the cat (that can move too). The mouse's goal is **to eat the maximum amount of cheese before being eaten by the cat.**
 
 <img src="https://huggingface.co/datasets/huggingface-deep-rl-course/course-images/resolve/main/en/unit1/rewards_3.jpg" alt="Rewards" width="100%">
 
-As we can see in the diagram, **it’s more probable to eat the cheese near us than the cheese close to the cat** (the closer we are to the cat, the more dangerous it is).
+As we can see in the diagram, **it’s easier (more probable) to eat the cheese near us than the cheese close to the cat** (the closer we are to the cat, the more dangerous it is).
 
 Consequently, **the reward near the cat, even if it is bigger (more cheese), will be more discounted** since we’re not really sure we’ll be able to eat it.
 
-To discount the rewards, we proceed like this:
+To discount the rewards, a common method is to proceed like this:
 
 1. We define a discount rate called gamma. **It must be between 0 and 1.** Most of the time between **0.95 and 0.99**.
 - The larger the gamma, the smaller the discount. This means our agent **cares more about the long-term reward.**
